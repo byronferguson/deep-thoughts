@@ -7,11 +7,12 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start": "if-env NODE_ENV=production && yarn start:prod || yarn start:dev",
     "start:prod": "cd server && npm start",
-    "start:dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
-    "install": "cd server && npm i && cd ../client && npm i",
-    "seed": "cd server && npm run seed"
+    "start:dev": "concurrently \"cd server && yarn watch\" \"cd client && npm start\"",
+    "install": "cd ./server && yarn && cd ../client && yarn",
+    "seed": "cd server && yarn seed",
+    "heroku-postbuild": "cd client && yarn build"
   },
   "dependencies": {
     "if-env": "^1.0.4"
