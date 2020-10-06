@@ -9,8 +9,6 @@ const Home = () => {
 
   const thoughts = data?.thoughts ?? [];
 
-  console.log('thoughts :>> ', thoughts);
-
   return (
     <main>
       <div className="flex-row justify-space-between">
