@@ -1,18 +1,36 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-import { QUERY_USER } from '../utils/queries';
+import { QUERY_USER, QUERY_ME } from '../utils/queries';
+import Auth from '../utils/auth';
 
 import FriendList from '../components/FriendList';
 import ThoughtList from '../components/ThoughtList';
 
 const Profile = () => {
   const { username } = useParams();
-  const { data, loading } = useQuery(QUERY_USER, {
+  const { loading, data } = useQuery(username ? QUERY_USER : QUERY_ME, {
     variables: { username },
   });
 
-  const user = data?.user ?? {};
+  const user = data?.me ?? data?.user ?? {};
+
+  // redirect to personal profile page if username is the logged-in user's
+  if (
+    Auth.loggedIn() &&
+    Auth.getProfile().data.username.toLowerCase() === username?.toLowerCase()
+  ) {
+    return <Redirect to="/profile" />;
+  }
+
+  if (!user?.username) {
+    return (
+      <h4>
+        You need to be logged in to see this page. Use the navigation links
+        above to sign up or log in!
+      </h4>
+    );
+  }
 
   return loading ? (
     <div>Loading...</div>
